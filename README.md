@@ -1,58 +1,43 @@
-# shopping.bkia.com.au
+# shopping.bkia.com.au — DEPRECATED
 
-Static landing page for the family shopping kiosk. Hosted on GitHub Pages
-at the custom subdomain `shopping.bkia.com.au`.
+> **As of 2026-05-08, this repo is retired.** `shopping.bkia.com.au` now
+> points at the Vercel-hosted custom kiosk UI in the sibling repo
+> [`shieldsb-hub/ha-shopping-proxy`](https://github.com/shieldsb-hub/ha-shopping-proxy).
+> The DNS CNAME at partnerconsole.net was migrated from
+> `shieldsb-hub.github.io.` to `*.vercel-dns-017.com.`, the GH Pages
+> custom-domain config has been cleared, and the `CNAME` file has been
+> removed from this repo.
+>
+> **Why retired:** the Phase 1 wrapper (this repo) only served a
+> static landing page that captured a teal cart apple-touch-icon and
+> redirected to the Nabu Casa kiosk URL. Phase 2 replaced both the
+> redirect and the kiosk with a same-origin custom UI built on HA's
+> REST API behind a path-scoped gateway, so anyone in the household
+> can use the shopping list without an HA login. Same icon, no
+> redirect, no SPA OAuth wall. See
+> [`ha-shopping/BRIEFING.md`](https://github.com/shieldsb-hub/ha-shopping/blob/main/BRIEFING.md)
+> M5 for the architectural narrative.
+>
+> **Kept (not deleted) so:** git history of the icon experiment
+> remains discoverable; `icon.svg` and `icon.png` here were the source
+> for what's now in `ha-shopping-proxy/public/`.
 
-## Why this exists
+---
 
-The real shopping list dashboard lives on Home Assistant at
-`https://wooaeilbttvus6etixtt2izabobprcoj.ui.nabu.casa/shopping-list/list`.
-Two problems we're solving with this wrapper:
+## Original purpose (preserved for history)
 
-1. **Friendlier URL.** The Nabu Casa cloud subdomain is a random
-   alphanumeric string. `shopping.bkia.com.au` is what we share with
-   family.
-2. **Custom Home Screen icon.** HA serves its own apple-touch-icon for
-   all dashboards (the HA logo). iOS captures the icon at "Add to Home
-   Screen" time from whichever page is currently visible. This page
-   serves a teal cart PNG so the Home Screen icon is recognisable.
+Static landing page for the family shopping kiosk. Hosted on GitHub
+Pages at the custom subdomain `shopping.bkia.com.au` until 2026-05-08.
 
-## How it works
+The page captured a teal cart apple-touch-icon for iOS Add-to-Home-
+Screen and redirected to the actual Home Assistant dashboard URL. iOS
+detected standalone-mode launches via `window.navigator.standalone`
+and auto-redirected; Safari visits stayed on the landing page so the
+icon-capture flow worked.
 
-- Visiting `https://shopping.bkia.com.au/` in Safari shows a landing
-  page with the cart, an Add-to-Home-Screen instruction, and a CTA to
-  open the dashboard directly.
-- iOS standalone mode is detected via `window.navigator.standalone` and
-  `display-mode: standalone`. When launched from the Home Screen icon,
-  the page redirects to the actual dashboard. When viewed in Safari,
-  it stays put so the icon-capture flow works.
+## Related (active)
 
-## Deploy
-
-Push to `main`. GitHub Pages deploys automatically from the repo root.
-TLS cert is auto-issued by GitHub via Let's Encrypt once the DNS CNAME
-is verified.
-
-DNS (one-time, at the bkia.com.au registrar / partnerconsole.net):
-
-```
-Type:  CNAME
-Name:  shopping
-Value: shieldsb-hub.github.io.
-TTL:   3600
-```
-
-GitHub Pages settings (one-time):
-- Source: deploy from branch `main`, folder `/`
-- Custom domain: `shopping.bkia.com.au`
-- Enforce HTTPS: on
-
-## Updating the icon
-
-Edit `icon.svg` (180×180 viewBox), then regenerate `icon.png` via
-`sips -s format png -Z 180 icon.svg --out icon.png` (macOS) or
-`rsvg-convert -w 180 -h 180 icon.svg -o icon.png` (Linux).
-
-## Related
-
-- `../ha-shopping/` — HA-side packages, scripts, dashboard config.
+- [`shieldsb-hub/ha-shopping-proxy`](https://github.com/shieldsb-hub/ha-shopping-proxy)
+  — the live successor at `shopping.bkia.com.au`
+- [`shieldsb-hub/ha-shopping`](https://github.com/shieldsb-hub/ha-shopping)
+  — the HA-side packages, automations, and dashboard config
